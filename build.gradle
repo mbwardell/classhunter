@@ -1,0 +1,90 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'org.github.mbwardell'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+configurations {
+    module1
+    module2
+}
+
+dependencies {
+    implementation 'info.picocli:picocli:4.6.1'
+
+    module1 'org.apache.commons:commons-lang3:3.11'
+    module2 'org.apache.commons:commons-collections4:4.4'
+    module2 'org.apache.commons:commons-compress:1.20'
+
+    testCompile 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'commons-io:commons-io:2.6'
+    testImplementation 'net.lingala.zip4j:zip4j:1.3.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+def testDataDir = "$buildDir/testdata"
+
+task prepareTestData {
+    def module1Dir = "$testDataDir/org/apache/commons-lang3"
+    def module2Dir = "$testDataDir/org/apache/commons-other"
+
+    inputs.files configurations.module1, configurations.module2
+    outputs.dir testDataDir
+
+    doLast {
+        copy {
+            from configurations.module1
+            into module1Dir
+        }
+        copy {
+            from configurations.module2
+            into module2Dir
+        }
+        new File("$module1Dir/module.xml").text = """
+        <module name="org.apache.commons.lang3" xmlns="urn:jboss:module:1.5">
+            <resources>
+                <resource-root path="commons-lang3-3.11.jar"/>
+            </resources>
+        </module>
+        """
+        new File("$module2Dir/module.xml").text = """
+        <module name="org.apache.commons.other" xmlns="urn:jboss:module:1.5">
+            <resources>
+                <resource-root path="commons-compress-1.20.jar"/>
+                <resource-root path="commons-collections4-4.4.jar"/>
+            </resources>
+        </module>
+        """
+    }
+}
+
+test {
+    useJUnitPlatform()
+    dependsOn prepareTestData
+    systemProperty "testdatadir", testDataDir
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'org.github.mbwardell.classhunter.Main'
+    }
+}
+
+jar.enabled false
+
+assemble.dependsOn shadowJar
+
