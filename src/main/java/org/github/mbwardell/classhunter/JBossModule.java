@@ -1,3 +1,9 @@
+/*
+Copyright 2021 M. Wardell
+        Use of this source code is governed by an MIT-style
+        license that can be found in the LICENSE file or at
+        https://opensource.org/licenses/MIT
+*/
 package org.github.mbwardell.classhunter;
 
 import org.w3c.dom.Document;

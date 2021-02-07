@@ -1,3 +1,9 @@
+/*
+Copyright 2021 M. Wardell
+        Use of this source code is governed by an MIT-style
+        license that can be found in the LICENSE file or at
+        https://opensource.org/licenses/MIT
+*/
 package org.github.mbwardell.classhunter;
 
 import picocli.CommandLine;
@@ -11,7 +17,7 @@ public class Main implements Callable<Integer> {
     @CommandLine.Option(names = {"-d", "--directory"}, description = "directory to search")
     Path searchDirectoryOption;
 
-    @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
+    @CommandLine.ArgGroup(multiplicity = "1")
     SearchMethod searchMethod;
 
     public static void main(String... args) {
