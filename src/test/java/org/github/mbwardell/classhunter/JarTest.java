@@ -9,15 +9,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JarTest {
+class JarTest {
     private Path testDataDir;
 
     @BeforeEach
     public void setup() {
         testDataDir = Paths.get(System.getProperty("testdatadir"));
     }
+
     @Test
-    public void testGetClasses() throws Exception {
+    void testGetClasses() throws Exception {
         Path jar = testDataDir.resolve("org/apache/commons-lang3/commons-lang3-3.11.jar");
         List<String> classes = (new Jar(jar)).getClasses();
 

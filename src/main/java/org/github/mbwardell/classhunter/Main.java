@@ -21,6 +21,7 @@ public class Main implements Callable<Integer> {
     }
 
     @Override
+    @SuppressWarnings("java:S106")
     public Integer call() {
         try {
             Hunter.Method method = searchMethod.byJar ? Hunter.Method.JAR : Hunter.Method.MODULE;

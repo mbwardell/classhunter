@@ -9,19 +9,20 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class Jar {
-    private final Path jar;
+    private final Path pathToJar;
 
-    public Jar(Path jar) {
-        this.jar = jar;
+    public Jar(Path pathToJar) {
+        this.pathToJar = pathToJar;
     }
 
     public List<String> getClasses() throws IOException {
-        List<String> classNames = new ArrayList<String>();
-        ZipInputStream zip = new ZipInputStream(Files.newInputStream(jar));
-        for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-            if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                String className = entry.getName().replace('/', '.'); // including ".class"
-                classNames.add(className.substring(0, className.length() - ".class".length()));
+        List<String> classNames = new ArrayList<>();
+        try (ZipInputStream zip = new ZipInputStream(Files.newInputStream(pathToJar))) {
+            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    String className = entry.getName().replace('/', '.'); // including ".class"
+                    classNames.add(className.substring(0, className.length() - ".class".length()));
+                }
             }
         }
         return classNames;

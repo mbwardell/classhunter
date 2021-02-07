@@ -2,7 +2,6 @@ package org.github.mbwardell.classhunter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -12,7 +11,7 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HunterTest {
+class HunterTest {
     private Path testDataDir;
 
     @BeforeEach
@@ -21,7 +20,7 @@ public class HunterTest {
     }
 
     @Test
-    public void testByModule() throws Exception {
+    void testByModule() throws Exception {
         Hunter hunter = new Hunter(testDataDir, Hunter.Method.MODULE);
 
         String output;
@@ -39,7 +38,7 @@ public class HunterTest {
     }
 
     @Test
-    public void testByJar() throws Exception {
+    void testByJar() throws Exception {
         Hunter hunter = new Hunter(testDataDir, Hunter.Method.JAR);
 
         String output;
