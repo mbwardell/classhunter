@@ -8,6 +8,10 @@ apply plugin: 'com.github.johnrengelman.shadow'
 group 'org.github.mbwardell'
 version '1.0-SNAPSHOT'
 
+ext {
+    jarVersion = 'Development'
+}
+
 repositories {
     mavenCentral()
 }
@@ -80,7 +84,9 @@ test {
 
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'org.github.mbwardell.classhunter.Main'
+        attributes('Main-Class': 'org.github.mbwardell.classhunter.Main',
+                'Implementation-Title': 'ClassHunter',
+                'Implementation-Version': jarVersion)
     }
 }
 

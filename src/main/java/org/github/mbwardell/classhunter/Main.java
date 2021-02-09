@@ -6,13 +6,14 @@ Copyright 2021 M. Wardell
 */
 package org.github.mbwardell.classhunter;
 
+import org.github.mbwardell.classhunter.cli.VersionProvider;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(name = "classhunter", mixinStandardHelpOptions = true)
+@CommandLine.Command(name = "classhunter", mixinStandardHelpOptions = true, versionProvider=VersionProvider.class)
 public class Main implements Callable<Integer> {
     @CommandLine.Option(names = {"-d", "--directory"}, description = "directory to search")
     Path searchDirectoryOption;
