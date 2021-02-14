@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'org.github.mbwardell'
-version '1.0-SNAPSHOT'
+version (findProperty('buildVersion') ?: '1.0-SNAPSHOT')
 
 ext {
     jarVersion = 'Development'
@@ -92,5 +92,25 @@ shadowJar {
 
 jar.enabled false
 
-assemble.dependsOn shadowJar
+
+task dist(type: Zip) {
+    dependsOn shadowJar
+
+    baseName 'classhunter'
+    destinationDir file("$buildDir/dist")
+    from("$buildDir/libs/") {
+        include 'classhunter*.jar'
+        rename { 'classhunter.jar' }
+    }
+    from("$projectDir") {
+        include 'LICENSE'
+    }
+    from("$projectDir/src/dist/resources") {
+        include 'classhunter'
+        fileMode 0755
+    }
+}
+
+assemble.dependsOn dist
+
 

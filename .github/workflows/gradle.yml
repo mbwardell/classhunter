@@ -3,6 +3,7 @@
 
 name: Java CI with Gradle
 
+
 on:
   push:
     branches: [ main ]
@@ -14,6 +15,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      BUILD_VERSION: 1.0.0-SNAPSHOT
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
@@ -23,4 +27,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew -P buildVersion=${{env.BUILD_VERSION}} build
+    - name: 'Archive distribution'
+      uses: 'actions/upload-artifact@v2'
+      with:
+        path: "build/dist/classhunter-${{env.BUILD_VERSION}}.zip"
