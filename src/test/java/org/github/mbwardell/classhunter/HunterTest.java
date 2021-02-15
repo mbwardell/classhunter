@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -37,10 +38,10 @@ class HunterTest {
             output = byteStream.toString(StandardCharsets.UTF_8.name());
         }
 
-        assertThat(output.split("\n"))
+        assertThat(output.split(System.lineSeparator()))
                 .hasSize(1222)
-                .contains("org.apache.commons.lang3: org.apache.commons.lang3.CharRange$CharacterIterator")
-                .contains("org.apache.commons.other: org.apache.commons.compress.MemoryLimitException");
+                .contains(fixPaths("org.apache.commons.lang3: org.apache.commons.lang3.CharRange$CharacterIterator"))
+                .contains(fixPaths("org.apache.commons.other: org.apache.commons.compress.MemoryLimitException"));
     }
 
     @Test
@@ -55,9 +56,13 @@ class HunterTest {
             output = byteStream.toString(StandardCharsets.UTF_8.name());
         }
 
-        assertThat(output.split("\n"))
+        assertThat(output.split(System.lineSeparator()))
                 .hasSize(1222)
-                .contains("org/apache/commons-lang3/commons-lang3-3.11.jar: org.apache.commons.lang3.ArrayUtils")
-                .contains("org/apache/commons-other/commons-collections4-4.4.jar: org.apache.commons.collections4.Factory");
+                .contains(fixPaths("org/apache/commons-lang3/commons-lang3-3.11.jar: org.apache.commons.lang3.ArrayUtils"))
+                .contains(fixPaths("org/apache/commons-other/commons-collections4-4.4.jar: org.apache.commons.collections4.Factory"));
+    }
+
+    private String fixPaths(String in) {
+        return in.replace("/", File.separator);
     }
 }

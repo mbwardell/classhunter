@@ -109,6 +109,9 @@ task dist(type: Zip) {
         include 'classhunter'
         fileMode 0755
     }
+    from("$projectDir/src/dist/resources") {
+        include 'classhunter.cmd'
+    }
 }
 
 assemble.dependsOn dist
